@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppLayout from "@layouts/AppLayout";
 import DashboardView from "@views/DashboardView";
+import CrearRegistro from "@views/registros/CrearRegistro";
 
 export default function Router() {
   return (
@@ -8,8 +9,7 @@ export default function Router() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<DashboardView />} index />
-          <Route path="/about" element={<h1 className="text-6xl">About</h1>} />
-          <Route path="/contact" element={<h1 className="text-6xl">Contact</h1>} />
+          <Route path="/registros/create" element={<CrearRegistro />} />
         </Route>
       </Routes>
     </BrowserRouter>
