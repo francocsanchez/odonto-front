@@ -1,17 +1,10 @@
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
+import type { PacienteFormData } from "@/types";
 
 type PacienteFormProps = {
-  register: UseFormRegister<{
-    fullName: string;
-    dni: string;
-    number_social: string;
-  }>;
-  errors: FieldErrors<{
-    fullName: string;
-    dni: string;
-    number_social: string;
-  }>;
+  register: UseFormRegister<PacienteFormData>;
+  errors: FieldErrors<PacienteFormData>;
 };
 export default function PacienteForm({ errors, register }: PacienteFormProps) {
   return (

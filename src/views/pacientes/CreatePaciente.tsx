@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import PacienteForm from "@components/pacientes/PacienteForm";
+import type { PacienteFormData } from "@/types";
 
 export default function CreatePaciente() {
-  const initialValues = {
+  const initialValues: PacienteFormData = {
     fullName: "",
     dni: "",
     number_social: "",
@@ -15,7 +16,7 @@ export default function CreatePaciente() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = (data: PacienteFormData) => {
     console.log("Form submitted with data:", data);
   };
   return (
