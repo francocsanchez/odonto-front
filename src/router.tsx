@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppLayout from "@layouts/AppLayout";
 import DashboardView from "@views/DashboardView";
-import CrearRegistro from "@views/registros/CrearRegistro";
-import CreatePaciente from "@/views/pacientes/CreatePaciente";
+import CreatePaciente from "@views/pacientes/CreatePaciente";
+import ListPacientes from "@views/pacientes/ListPacientes";
+import EditPaciente from "@views/pacientes/EditPaciente";
 
 export default function Router() {
   return (
@@ -10,7 +11,9 @@ export default function Router() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<DashboardView />} index />
-          <Route path="/registros/create" element={<CrearRegistro />} />
+
+          <Route path="/pacientes" element={<ListPacientes />} />
+          <Route path="/pacientes/:pacienteId/edit" element={<EditPaciente />} />
           <Route path="/pacientes/create" element={<CreatePaciente />} />
         </Route>
       </Routes>
