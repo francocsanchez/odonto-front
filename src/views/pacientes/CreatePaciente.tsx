@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import PacienteForm from "@components/pacientes/PacienteForm";
 import type { PacienteFormData } from "@/types";
 import { createPaciente } from "@api/PacienteAPI";
@@ -18,8 +19,9 @@ export default function CreatePaciente() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const handleFormSubmit = async (data: PacienteFormData) => {
-    await createPaciente(data);
+  const handleFormSubmit = async (formData: PacienteFormData) => {
+    const data = await createPaciente(formData);
+    toast.success(data.message);
     navigate("/");
   };
   return (
