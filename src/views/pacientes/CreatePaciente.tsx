@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import PacienteForm from "@components/pacientes/PacienteForm";
 import type { PacienteFormData } from "@/types";
 import { createPaciente } from "@api/PacienteAPI";
 
 export default function CreatePaciente() {
+  const navigate = useNavigate();
   const initialValues: PacienteFormData = {
     fullName: "",
     dni: "",
@@ -17,8 +18,9 @@ export default function CreatePaciente() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const handleFormSubmit = (data: PacienteFormData) => {
-    createPaciente(data);
+  const handleFormSubmit = async (data: PacienteFormData) => {
+    await createPaciente(data);
+    navigate("/");
   };
   return (
     <>
