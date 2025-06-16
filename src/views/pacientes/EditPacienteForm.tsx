@@ -2,12 +2,12 @@ import PacienteForm from "@/components/pacientes/PacienteForm";
 import type { Paciente, PacienteFormData } from "@/types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePaciente } from "@/api/PacienteAPI";
 import { toast } from "react-toastify";
 
 type EditPacienteFormProps = {
-  data: PacienteFormData;
+  data: Paciente;
   pacienteId: Paciente["_id"];
 };
 export default function EditPacienteForm({ data, pacienteId }: EditPacienteFormProps) {
@@ -21,12 +21,16 @@ export default function EditPacienteForm({ data, pacienteId }: EditPacienteFormP
       fullName: data.fullName,
       dni: data.dni,
       number_social: data.number_social,
+      obraSocial: data.obraSocial._id,
     },
   });
 
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: updatePaciente,
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["pacientes"] });
+      queryClient.invalidateQueries({ queryKey: ["editPaciente", pacienteId] });
       toast.success(data.message);
       navigate("/pacientes");
     },

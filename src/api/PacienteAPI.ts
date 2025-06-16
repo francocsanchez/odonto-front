@@ -1,5 +1,5 @@
 import api from "@lib/axios";
-import { TablePacienteSchema, type Paciente, type PacienteFormData } from "@/types";
+import { pacienteSchema, TablePacienteSchema, type Paciente, type PacienteFormData } from "@/types";
 import { isAxiosError } from "axios";
 
 export async function createPaciente(formData: PacienteFormData) {
@@ -16,7 +16,6 @@ export async function createPaciente(formData: PacienteFormData) {
 export async function getAllPacientes() {
   try {
     const { data } = await api.get("/pacientes");
-
     const response = TablePacienteSchema.safeParse(data);
 
     if (!response.success) {
@@ -25,6 +24,7 @@ export async function getAllPacientes() {
 
     return response.data;
   } catch (error) {
+    console.log(error);
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message || "Error al obtener los pacientes");
     }
@@ -34,8 +34,13 @@ export async function getAllPacientes() {
 export async function getPacienteById(pacienteId: string) {
   try {
     const { data } = await api.get(`/pacientes/${pacienteId}`);
+    const response = pacienteSchema.safeParse(data);
 
-    return data;
+    if (!response.success) {
+      throw new Error("Error en la validación de los datos de pacientes");
+    }
+
+    return response.data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message || "Error al obtener el paciente");

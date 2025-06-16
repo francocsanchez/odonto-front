@@ -12,6 +12,7 @@ export default function CreatePaciente() {
     fullName: "",
     dni: "",
     number_social: "",
+    obraSocial: "",
   };
 
   const {
