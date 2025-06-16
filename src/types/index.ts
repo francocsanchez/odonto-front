@@ -27,8 +27,11 @@ export const pacienteFormSchema = z.object({
   fullName: z.string(),
   dni: z.string(),
   number_social: z.string(),
-  obraSocial: z.string(), // solo el _id
+  obraSocial: z.string(),
 });
+
+export type PacienteFormData = z.infer<typeof pacienteFormSchema>;
+
 export const obraSocialSchema = z.object({
   _id: z.string(),
   name: z.string(),
@@ -39,7 +42,6 @@ export const obraSocialSchema = z.object({
     })
   ),
 });
-export type PacienteFormData = z.infer<typeof pacienteFormSchema>;
 
 export const SelectObtraSocial = z.array(
   obraSocialSchema.pick({
@@ -47,3 +49,31 @@ export const SelectObtraSocial = z.array(
     name: true,
   })
 );
+
+export const registroSchema = z.object({
+  _id: z.string(),
+  fechaAtencion: z.string().or(z.date()),
+  usuario: z.object({
+    _id: z.string(),
+    name: z.string(),
+    lastName: z.string(),
+  }),
+  atencion: z.array(
+    z.object({
+      _id: z.string(),
+      codigo: z.object({
+        _id: z.string(),
+        description: z.string(),
+      }),
+      valor: z.number(),
+      pagoDentista: z.number(),
+      observaciones: z.string().optional(),
+      pagado: z.enum(["aprobado", "pendiente", "rechazado"]),
+    })
+  ),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const registrosSchema = z.array(registroSchema);
+export type Registro = z.infer<typeof registroSchema>;

@@ -56,7 +56,7 @@ export default function ListPacientes() {
                   <td className="px-5 py-4 text-center">
                     <div className="flex justify-center items-center gap-2">
                       <Link
-                        to={`/pacientes/${paciente._id}`}
+                        to={`/pacientes/${paciente._id}/registros`}
                         className="cursor-pointer text-sm text-purple-600 hover:text-purple-800 font-semibold mr-2"
                       >
                         REGISTROS
