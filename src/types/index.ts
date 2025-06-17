@@ -43,12 +43,18 @@ export const obraSocialSchema = z.object({
   ),
 });
 
+export type ObraSocial = z.infer<typeof obraSocialSchema>;
+
 export const SelectObtraSocial = z.array(
   obraSocialSchema.pick({
     _id: true,
     name: true,
   })
 );
+
+export type ObraSocialFormData = {
+  name: string;
+};
 
 export const registroSchema = z.object({
   _id: z.string(),
