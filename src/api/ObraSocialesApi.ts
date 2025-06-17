@@ -19,6 +19,23 @@ export async function getAllObrasSociales() {
   }
 }
 
+export async function getAllObrasSocialesActives() {
+  try {
+    const { data } = await api.get("/obras-sociales/totals");
+    const response = SelectObtraSocial.safeParse(data);
+
+    if (!response.success) {
+      throw new Error("Error en la validación de los datos de pacientes");
+    }
+
+    return response.data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al obtener los pacientes");
+    }
+  }
+}
+
 export async function getObraSocialById(id: string) {
   try {
     const { data } = await api.get(`/obras-sociales/${id}`);
@@ -66,6 +83,20 @@ export async function updateObraSocial({ obraSocialId, formData }: UpdateObraSoc
       throw new Error(error.response.data.message || "Error al actualizar la obra social");
     } else {
       throw new Error("Error desconocido al actualizar la obra social");
+    }
+  }
+}
+
+export async function deleteObraSocial(obraSocialId: string) {
+  try {
+    const { data } = await api.patch(`/obras-sociales/${obraSocialId}/change-state`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al eliminar la obra social");
+    } else {
+      throw new Error("Error desconocido al eliminar la obra social");
     }
   }
 }

@@ -1,14 +1,29 @@
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getAllObrasSociales } from "@/api/ObraSocialesApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteObraSocial, getAllObrasSocialesActives } from "@/api/ObraSocialesApi";
+import { toast } from "react-toastify";
 
 export default function ListObraSociales() {
+  const queryClient = useQueryClient();
+
   const { data, isLoading } = useQuery({
     queryKey: ["obrasSociales"],
-    queryFn: getAllObrasSociales,
+    queryFn: getAllObrasSocialesActives,
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: deleteObraSocial,
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ["obrasSociales"] });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
   });
 
   if (isLoading) return <p>Cargando...</p>;
+
   if (data)
     return (
       <>
@@ -32,28 +47,39 @@ export default function ListObraSociales() {
             </Link>
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-6">
-            {data.map((obraSocial) => (
-              <div key={obraSocial._id} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="text-lg font-semibold text-gray-800 mb-3 text-center uppercase">{obraSocial.name}</h2>
+          <div className="flex flex-col gap-4 mt-6">
+            {data.map((obraSocial) => {
+              const isDisabled = obraSocial.enable === false;
 
-                <div className="flex justify-between">
-                  <Link
-                    to={`/obras-sociales/${obraSocial._id}/edit`}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow transition-all duration-200 uppercase"
-                  >
-                    Editar
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => console.log("Eliminando")}
-                    className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow transition-all duration-200 uppercase"
-                  >
-                    Eliminar
-                  </button>
+              return (
+                <div
+                  key={obraSocial._id}
+                  className={`flex items-center justify-between border rounded-2xl px-6 py-4 shadow-sm transition-shadow ${
+                    isDisabled ? "bg-gray-200 text-gray-500" : "bg-white text-gray-800 hover:shadow-md"
+                  }`}
+                >
+                  <h2 className="text-lg font-semibold uppercase">{obraSocial.name}</h2>
+
+                  <div className="flex gap-3">
+                    <Link
+                      to={`/obras-sociales/${obraSocial._id}/edit`}
+                      className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow transition-all duration-200 uppercase"
+                    >
+                      Editar
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => mutate(obraSocial._id)}
+                      className={`text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow transition-all duration-200 uppercase ${
+                        isDisabled ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
+                      }`}
+                    >
+                      {isDisabled ? "Activar" : "Eliminar"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </>
