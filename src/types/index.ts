@@ -49,6 +49,7 @@ export const SelectObtraSocial = z.array(
   obraSocialSchema.pick({
     _id: true,
     name: true,
+    enable: true,
   })
 );
 
@@ -83,3 +84,15 @@ export const registroSchema = z.object({
 
 export const registrosSchema = z.array(registroSchema);
 export type Registro = z.infer<typeof registroSchema>;
+
+const CodigoSchema = z.object({
+  _id: z.string(),
+  description: z.string(),
+  code: z.string(),
+  validity: z.string(),
+  price: z.number(),
+  enable: z.boolean(),
+  obraSocial: z.any(), // podés detallar más si hace falta
+});
+
+export const CodigosArraySchema = z.array(CodigoSchema);

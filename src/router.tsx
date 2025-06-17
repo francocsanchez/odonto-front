@@ -10,8 +10,11 @@ import ViewRegistrosPage from "@/views/registros/ViewRegistrosPage";
 import CrearRegistro from "@views/registros/CrearRegistro";
 
 import ListObraSociales from "@views/obrasSociales/ListObraSociales";
-import CreateObraSocial from "./views/obrasSociales/CreateObraSocial";
-import EditObraSocial from "./views/obrasSociales/EditObraSocial";
+import CreateObraSocial from "@views/obrasSociales/CreateObraSocial";
+import EditObraSocial from "@views/obrasSociales/EditObraSocial";
+
+import ListCodigos from "@views/codigos/ListCodigos";
+import ImportCodigos from "@views/codigos/ImportCodigos";
 
 export default function Router() {
   return (
@@ -30,6 +33,9 @@ export default function Router() {
           <Route path="/obras-sociales" element={<ListObraSociales />} />
           <Route path="/obras-sociales/create" element={<CreateObraSocial />} />
           <Route path="/obras-sociales/:obraSocialId/edit" element={<EditObraSocial />} />
+
+          <Route path="/codigos" element={<ListCodigos />} />
+          <Route path="/codigos/importar" element={<ImportCodigos />} />
         </Route>
       </Routes>
     </BrowserRouter>
