@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getAllPacientes } from "@/api/PacienteAPI";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export default function ListPacientes() {
   const { data, isLoading } = useQuery({
@@ -18,9 +19,9 @@ export default function ListPacientes() {
         <nav className="my-5">
           <Link
             to="/pacientes/create"
-            className="inline-block bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
+            className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
           >
-            + Nuevo paciente
+            <PlusCircleIcon className="h-5 w-5 text-white" /> Nuevo Paciente
           </Link>
         </nav>
 

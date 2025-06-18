@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteObraSocial, getAllObrasSocialesActives } from "@/api/ObraSocialesApi";
 import { toast } from "react-toastify";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export default function ListObraSociales() {
   const queryClient = useQueryClient();
@@ -33,9 +34,9 @@ export default function ListObraSociales() {
         <nav className="my-5">
           <Link
             to="/obras-sociales/create"
-            className="inline-block bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
+            className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
           >
-            + Nueva Obra Social
+            <PlusCircleIcon className="h-5 w-5 text-white" /> Nuevo Obra Social
           </Link>
         </nav>
 

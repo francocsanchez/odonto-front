@@ -92,7 +92,20 @@ const CodigoSchema = z.object({
   validity: z.string(),
   price: z.number(),
   enable: z.boolean(),
-  obraSocial: z.any(), // podés detallar más si hace falta
+  obraSocial: z.object({
+    name: z.string(),
+  }),
 });
 
+export type Codigo = z.infer<typeof CodigoSchema>;
+
+export const CodigoFormSchema = z.object({
+  code: z.string(),
+  description: z.string(),
+  validity: z.string(),
+  price: z.number(),
+  obraSocial: z.string(),
+});
+
+export type CodigoFormData = z.infer<typeof CodigoFormSchema>;
 export const CodigosArraySchema = z.array(CodigoSchema);

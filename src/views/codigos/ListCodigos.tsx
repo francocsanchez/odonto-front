@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllCodigos } from "@/api/CodigosAPI";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteCodigo, getAllCodigos } from "@/api/CodigosAPI";
 import { formatMonthYear, formatPrice } from "@/helpers";
 import { TableCellsIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
 
 export default function ListCodigos() {
   const queryClient = useQueryClient();
@@ -10,6 +12,17 @@ export default function ListCodigos() {
   const { data, isLoading } = useQuery({
     queryKey: ["codigos"],
     queryFn: getAllCodigos,
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: deleteCodigo,
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ["codigos"] });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
   });
 
   if (isLoading) return <p>Cargando...</p>;
@@ -21,20 +34,32 @@ export default function ListCodigos() {
         <p className="text-xl font-light text-gray-500 mt-2">Listado de códigos cargados</p>
 
         <nav className="my-5">
-          <div className="flex justify-between">
+          <div className="flex justify-between flex-wrap gap-3">
             <Link
               to="/codigos/create"
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
             >
               <PlusCircleIcon className="h-5 w-5 text-white" /> Nuevo Código
             </Link>
-            <Link
-              to="/codigos/importar"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
-            >
-              <TableCellsIcon className="h-5 w-5 text-white" />
-              Importar archivo
-            </Link>
+
+            <div className="flex gap-3">
+              <Link
+                to="/codigos/importar"
+                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
+              >
+                <TableCellsIcon className="h-5 w-5 text-white" />
+                Importar archivo
+              </Link>
+
+              <a
+                href="/Plantilla_Codigos.xlsx"
+                download
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200 uppercase"
+              >
+                <ArrowDownCircleIcon className="h-5 w-5 text-white" />
+                Plantilla
+              </a>
+            </div>
           </div>
         </nav>
 
@@ -70,14 +95,17 @@ export default function ListCodigos() {
                     <td className="px-5 py-4 text-gray-700 font-medium">{codigo.description}</td>
                     <td className="px-5 py-4 text-gray-700 font-medium text-center">{formatMonthYear(codigo.validity)}</td>
                     <td className="px-5 py-4 text-gray-600 text-center">{formatPrice(codigo.price)}</td>
-                    <td className="px-5 py-4 text-gray-600 text-center">{codigo.obraSocial?.name}</td>
+                    <td className="px-5 py-4 text-gray-600 text-center">{codigo.obraSocial.name}</td>
                     <td className="px-5 py-4 text-center">
-                      <Link
-                        to={`/codigos/${codigo._id}/edit`}
-                        className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow transition-all duration-200 uppercase"
+                      <button
+                        type="button"
+                        onClick={() => mutate(codigo._id)}
+                        className={`text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow transition-all duration-200 uppercase ${
+                          codigo.enable ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                        }`}
                       >
-                        Editar
-                      </Link>
+                        {codigo.enable ? "Eliminar" : "Activar"}
+                      </button>
                     </td>
                   </tr>
                 ))}

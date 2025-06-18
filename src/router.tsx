@@ -15,6 +15,7 @@ import EditObraSocial from "@views/obrasSociales/EditObraSocial";
 
 import ListCodigos from "@views/codigos/ListCodigos";
 import ImportCodigos from "@views/codigos/ImportCodigos";
+import CreateCodigo from "@views/codigos/CreateCodigo";
 
 export default function Router() {
   return (
@@ -35,6 +36,7 @@ export default function Router() {
           <Route path="/obras-sociales/:obraSocialId/edit" element={<EditObraSocial />} />
 
           <Route path="/codigos" element={<ListCodigos />} />
+          <Route path="/codigos/create" element={<CreateCodigo />} />
           <Route path="/codigos/importar" element={<ImportCodigos />} />
         </Route>
       </Routes>

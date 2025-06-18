@@ -1,4 +1,4 @@
-import { CodigosArraySchema } from "@/types";
+import { CodigosArraySchema, type Codigo, type CodigoFormData } from "@/types";
 import api from "@lib/axios";
 import { isAxiosError } from "axios";
 
@@ -35,5 +35,35 @@ export async function importarCodigos(formData: FormData) {
       throw new Error(error.response.data.message || "Error al importar los códigos");
     }
     throw new Error("Error de conexión");
+  }
+}
+
+export async function createCodigo(formData: CodigoFormData) {
+  try {
+    const { obraSocial, ...datosCodigo } = formData;
+
+    const { data } = await api.post(`/codigos/${obraSocial}/create`, datosCodigo);
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al crear el código");
+    } else {
+      throw new Error("Error desconocido al crear el código");
+    }
+  }
+}
+
+export async function deleteCodigo(codigoId: string) {
+  try {
+    const { data } = await api.patch(`/codigos/${codigoId}/change-state`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al eliminar el código");
+    } else {
+      throw new Error("Error desconocido al eliminar el código");
+    }
   }
 }
