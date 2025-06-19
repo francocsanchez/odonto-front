@@ -34,6 +34,7 @@ export async function getAllPacientes() {
 export async function getPacienteById(pacienteId: string) {
   try {
     const { data } = await api.get(`/pacientes/${pacienteId}`);
+    console.log(data);
     const response = pacienteSchema.safeParse(data);
 
     if (!response.success) {

@@ -1,5 +1,5 @@
 import api from "@lib/axios";
-import { registrosSchema } from "@/types";
+import { registrosSchema, type RegistroFormData } from "@/types";
 import { isAxiosError } from "axios";
 
 export async function getAllRegistrosById(pacienteId: string) {
@@ -32,5 +32,18 @@ export async function getAllRegistrosByPacienteIDWithEstado(pacienteId: string, 
       throw new Error(error.response.data.message || "Error al obtener los pacientes");
     }
     throw error;
+  }
+}
+
+export async function createRegistro(formData: RegistroFormData) {
+  try {
+    const { data } = await api.post(`/registros/${formData.paciente}/create`, formData);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.errors[0].msg);
+    } else {
+      throw new Error("Error desconocido al crear el registro");
+    }
   }
 }

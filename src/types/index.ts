@@ -60,11 +60,13 @@ export type ObraSocialFormData = {
 export const registroSchema = z.object({
   _id: z.string(),
   fechaAtencion: z.string().or(z.date()),
-  usuario: z.object({
-    _id: z.string(),
-    name: z.string(),
-    lastName: z.string(),
-  }),
+  usuario: z
+    .object({
+      _id: z.string(),
+      name: z.string(),
+      lastName: z.string(),
+    })
+    .nullable(),
   atencion: z.array(
     z.object({
       _id: z.string(),
@@ -109,3 +111,25 @@ export const CodigoFormSchema = z.object({
 
 export type CodigoFormData = z.infer<typeof CodigoFormSchema>;
 export const CodigosArraySchema = z.array(CodigoSchema);
+
+const CodigoSelectSchema = CodigoSchema.pick({
+  _id: true,
+  description: true,
+  code: true,
+});
+export type CodigoSelect = z.infer<typeof CodigoSelectSchema>;
+
+export const CodigosSelectArraySchema = z.array(CodigoSelectSchema);
+
+export const atencionItemSchema = z.object({
+  codigo: z.string(),
+  observaciones: z.string().optional(),
+});
+
+export const registroFormSchema = z.object({
+  fechaAtencion: z.string(),
+  paciente: z.string(),
+  atencion: z.array(atencionItemSchema),
+});
+
+export type RegistroFormData = z.infer<typeof registroFormSchema>;

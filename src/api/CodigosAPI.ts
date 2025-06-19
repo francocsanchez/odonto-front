@@ -1,4 +1,4 @@
-import { CodigosArraySchema, type Codigo, type CodigoFormData } from "@/types";
+import { CodigosArraySchema, CodigosSelectArraySchema, type Codigo, type CodigoFormData, type CodigoSelect } from "@/types";
 import api from "@lib/axios";
 import { isAxiosError } from "axios";
 
@@ -65,5 +65,15 @@ export async function deleteCodigo(codigoId: string) {
     } else {
       throw new Error("Error desconocido al eliminar el código");
     }
+  }
+}
+
+export async function getCodigosByPaciente(pacienteId: string): Promise<CodigoSelect[]> {
+  try {
+    const { data } = await api.get(`/codigos/${pacienteId}/codigos`);
+    return CodigosSelectArraySchema.parse(data);
+  } catch (error) {
+    console.error("Error al obtener códigos por usuario:", error);
+    throw new Error("No se pudieron obtener los códigos");
   }
 }

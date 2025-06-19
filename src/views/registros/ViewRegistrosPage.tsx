@@ -24,7 +24,6 @@ export default function ViewRegistrosPage() {
   });
 
   if (loadingRegistros || loadingPaciente) return <p className="text-center">Cargando...</p>;
-  if (isError) return <Navigate to="/404" />;
 
   if (!registros || registros.length === 0) {
     return (
@@ -103,9 +102,7 @@ export default function ViewRegistrosPage() {
           {registros.map((registro) => (
             <div key={registro._id} className="border border-gray-200 rounded-xl p-3 shadow-sm bg-white">
               <div className="flex justify-between">
-                <p className="text-sm font-medium">
-                  Profesional: {registro.usuario.lastName}, {registro.usuario.name}
-                </p>
+                <p className="text-sm font-medium">Profesional: [Aca viene el dentista]</p>
                 <p className="text-sm text-gray-500 mb-1">{formatFechaCompleta(registro.fechaAtencion)}</p>
               </div>
               {registro.atencion.map((a) => (
